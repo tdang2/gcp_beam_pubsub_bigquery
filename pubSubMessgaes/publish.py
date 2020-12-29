@@ -8,13 +8,12 @@ import json
 from datetime import datetime
 
 
-project_id = "project-id-here"    # project id here
-topic_id = "topic-id-here"            # topic id here
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = os.path.join(BASE_DIR, '.env')
 load_dotenv(override=True, dotenv_path=ENV_PATH)
 
+project_id = os.getenv('PROJECT_ID')
+topic_id = os.getenv('TOPIC_ID')
 credentials = Credentials.from_service_account_file(os.getenv('GCP_DEFAULT_CREDENTIALS'))
 publisher = pubsub_v1.PublisherClient(credentials=credentials)
 topic_path = publisher.topic_path(project_id, topic_id)

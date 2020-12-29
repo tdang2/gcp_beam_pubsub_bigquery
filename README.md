@@ -21,9 +21,12 @@ In order to run this code, you will need the following set up
 - Install and initialize GCP Cloud SDK: https://cloud.google.com/sdk/docs/
 - A service account that have the appropriate permission to read and write to the above services
 - Without the service account, you can use the default google credentials as well
-- Create a .env file with GCP_DEFAULT_CREDENTIALS key. The value is the absolute path of your credential json file
 - In BigQuery console window, create a dataset named "CoreTest" and a table named "dataflow_mvp"
 - The table schema can be referred inside mvp.py file toward the end of the source code
+- Create a .env file with the following keys
+  - GCP_DEFAULT_CREDENTIALS=the absolute path of your credential json file
+  - TOPIC_ID=GCP topic id name only
+  - SUBSCRIPTION_ID=GCP subscription id name only
 
 
 ## Structure
