@@ -69,4 +69,4 @@ provide the appropriate credentials. Refer to [Dataflow Python Quickstart](https
 
 - then run the dataflow with DirectRunner 
 
-      python -m mvp --output_table <dataset-id>.<table-id> --input_subscription projects/<project-id>/subscriptions/<subscription-id>
+      python -m mvp --output_table <project-id>:<dataset-id>.<table-id> --input_subscription projects/<project-id>/subscriptions/<subscription-id>
