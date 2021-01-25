@@ -19,7 +19,7 @@ publisher = pubsub_v1.PublisherClient(credentials=credentials)
 topic_path = publisher.topic_path(project_id, topic_id)
 users = ['Adam', 'Tri', 'Shrey', 'Ailin', 'Saumya']
 actions = ['laughs', 'eats', 'drinks', 'codes', 'sleeps']
-timers = [2, 3]
+timers = [5, 7]
 
 
 def main():

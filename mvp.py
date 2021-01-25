@@ -47,8 +47,7 @@ class ProcessPubSubMessage(beam.DoFn):
 class PrettyPrintMessage(beam.DoFn):
 
     def process(self, element, *args, **kwargs):
-        logging.info('----- New window -----')
-        print(element)
+        logging.info(element)
         yield element
 
 
