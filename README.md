@@ -21,9 +21,12 @@ In order to run this code, you will need the following set up
 - Install and initialize GCP Cloud SDK: https://cloud.google.com/sdk/docs/
 - A service account that have the appropriate permission to read and write to the above services
 - Without the service account, you can use the default google credentials as well
-- Create a .env file with GCP_DEFAULT_CREDENTIALS key. The value is the absolute path of your credential json file
 - In BigQuery console window, create a dataset named "CoreTest" and a table named "dataflow_mvp"
 - The table schema can be referred inside mvp.py file toward the end of the source code
+- Create a .env file with the following keys
+  - GCP_DEFAULT_CREDENTIALS=the absolute path of your credential json file
+  - TOPIC_ID=GCP topic id name only
+  - SUBSCRIPTION_ID=GCP subscription id name only
 
 
 ## Structure
@@ -39,7 +42,7 @@ In order to run this code, you will need the following set up
   - it saves the output to bigquery to CoreTest.dataflow_mvp
   - it aggregates name and number of action per name per window batch and print it out
   
-- wordCountExample.py is the exact copy of dataflow getting started example provided from [Apache Beam](https://beam.apache.org/get-started/beam-overview/)
+- Dataflow getting started example provided from [Apache Beam](https://beam.apache.org/get-started/beam-overview/)
 
 ## Usages  
 
@@ -66,4 +69,38 @@ provide the appropriate credentials. Refer to [Dataflow Python Quickstart](https
 
 - then run the dataflow with DirectRunner 
 
-      python -m mvp --output_table <dataset-id>.<table-id> --input_subscription projects/<project-id>/subscriptions/<subscription-id>
+      python -m mvp --output_table <project-id>:<dataset-id>.<table-id> --input_subscription projects/<project-id>/subscriptions/<subscription-id> 
+
+## Deploy on GCP
+- More detail from [GCP Flex Template example](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/dataflow/flex-templates/streaming_beam)
+
+- Set shell environment variables
+
+      export REGION="us-central1"
+      export SUBSCRIPTION="<your_subscription_name>"
+      export PROJECT="<your_project_name>"
+      export DATASET="<your_dataset_name>"
+      export TABLE="<your_table_name"
+      export BUCKET="<you_gcp_storage_bucket_name>"
+
+- Docker Build the template. In this case, the image name is tri-beam
+  
+      export TEMPLATE_IMAGE="gcr.io/$PROJECT/dataflow/tri-beam:latest"
+      gcloud builds submit --tag "$TEMPLATE_IMAGE"
+  
+- Create the template json. In this case, the template json file name is tri-beam
+
+      export TEMPLATE_PATH="gs://$BUCKET/test/templates/tri-beam.json"
+      gcloud dataflow flex-template build $TEMPLATE_PATH \
+        --image "$TEMPLATE_IMAGE" \
+        --sdk-language "PYTHON" \
+        --metadata-file "metadata.json"
+
+- Running Dataflow flex template. In this case, the job name is tri-beam-<YYMMDD-HHMMSS>
+ 
+      gcloud dataflow flex-template run "tri-beam-`date +%Y%m%d-%H%M%S`" \
+        --template-file-gcs-location "$TEMPLATE_PATH" \
+        --parameters input_topic="projects/$PROJECT/topics/$TOPIC" \
+        --parameters output_table="$PROJECT:$DATASET.$TABLE" \
+        --region "$REGION"
+  

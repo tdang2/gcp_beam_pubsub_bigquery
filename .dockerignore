@@ -1,0 +1,10 @@
+venv
+.env
+pubSubMessages
+__pycache__
+.vscode
+.cache
+.git
+.idea
+*.db
+*.csv

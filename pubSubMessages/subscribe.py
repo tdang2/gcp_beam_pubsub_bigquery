@@ -9,8 +9,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = os.path.join(BASE_DIR, '.env')
 load_dotenv(override=True, dotenv_path=ENV_PATH)
 
-project_id = "project-id-here"
-subscription_id = "subscription-id-here"
+project_id = os.getenv('PROJECT_ID')
+subscription_id = os.getenv('SUBSCRIPTION_ID')
 timeout = 10  # Number of seconds the subscriber should listen for messages
 
 credentials = Credentials.from_service_account_file(os.getenv('GCP_DEFAULT_CREDENTIALS'))
